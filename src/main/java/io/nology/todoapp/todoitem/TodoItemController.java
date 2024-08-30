@@ -19,7 +19,7 @@ public class TodoItemController {
     @PostMapping
     public String postMethodName(@Valid @RequestBody CreateTodoDTO data) {
         System.out.println(data);
-        return "Creates todoItem post";
+        return this.todoItemService.createTodoItem(data);
     }
 
 }
