@@ -49,8 +49,8 @@ public class TodoItemController {
     public ResponseEntity<TodoItem> updateTodoItemById(@PathVariable Long id,
             @Valid @RequestBody UpdateTodoDTO data) throws Exception {
         Optional<TodoItem> result = this.todoItemService.updateTodoItemById(id, data);
-        TodoItem foundPost = result.orElseThrow(() -> new NotFoundException("Could not find todo with id " + id));
-        return new ResponseEntity<>(foundPost, HttpStatus.OK);
+        TodoItem foundTodo = result.orElseThrow(() -> new NotFoundException("Could not find todo with id " + id));
+        return new ResponseEntity<>(foundTodo, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
