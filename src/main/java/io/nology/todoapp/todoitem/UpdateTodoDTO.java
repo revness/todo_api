@@ -16,6 +16,9 @@ public class UpdateTodoDTO {
     @Min(1)
     private Long categoryId;
 
+    private boolean completed;
+    private boolean deleted;
+
     public String getTitle() {
         return title;
     }
@@ -26,6 +29,14 @@ public class UpdateTodoDTO {
 
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
 }

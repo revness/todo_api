@@ -3,9 +3,9 @@ package io.nology.todoapp.category;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import io.nology.todoapp.common.exceptions.ServiceValidationException;
 import io.nology.todoapp.common.ValidationErrors;
 import jakarta.validation.Valid;
@@ -14,8 +14,6 @@ import jakarta.validation.Valid;
 public class CategoryService {
     @Autowired
     private CategoryRepository repo;
-    @Autowired
-    private ModelMapper mapper;
 
     public Category create(@Valid CreateCategoryDTO data) throws Exception {
         ValidationErrors errors = new ValidationErrors();
@@ -23,10 +21,11 @@ public class CategoryService {
         if (repo.existsByName(formattedName)) {
             errors.addError("name", String.format("category with name '%s' already exists", formattedName));
         }
-        Category newCategory = mapper.map(data, Category.class);
         if (errors.hasErrors()) {
             throw new ServiceValidationException(errors);
         }
+        Category newCategory = new Category();
+        newCategory.setName(formattedName);
         return this.repo.save(newCategory);
 
     }
@@ -38,6 +37,31 @@ public class CategoryService {
 
     public Optional<Category> findById(Long categoryId) {
         return this.repo.findById(categoryId);
+    }
+
+    public boolean deleteById(Long id) {
+        Optional<Category> result = this.findById(id);
+        if (result.isEmpty()) {
+            return false;
+        }
+
+        this.repo.delete(result.get());
+
+        return true;
+    }
+
+    public Category updateCategoryById(Long id, CreateCategoryDTO data) throws Exception {
+        Optional<Category> result = this.findById(id);
+        if (result.isEmpty()) {
+            throw new Exception("Category not found with id " + id);
+        }
+        Category foundCategory = result.get();
+        String formattedName = data.getName().trim().toLowerCase();
+        if (repo.existsByName(formattedName)) {
+            throw new Exception("Category already exists");
+        }
+        foundCategory.setName(formattedName);
+        return this.repo.save(foundCategory);
     }
 
 }

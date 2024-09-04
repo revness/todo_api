@@ -2,8 +2,8 @@ package io.nology.todoapp.todoitem;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,30 +22,34 @@ public class TodoItemService {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private ModelMapper mapper;
-
     public TodoItem createTodoItem(@Valid CreateTodoDTO data) throws Exception {
         ValidationErrors errors = new ValidationErrors();
-        TodoItem newTodo = mapper.map(data, TodoItem.class);
+        TodoItem newTodo = new TodoItem();
+        newTodo.setTitle(data.getTitle().trim());
+
         Optional<Category> categoryResult = this.categoryService.findById(data.getCategoryId());
 
         if (categoryResult.isEmpty()) {
             errors.addError("category", String.format("Category with id %s does not exist", data.getCategoryId()));
-        } else {
-            newTodo.setCategory(categoryResult.get());
         }
 
         if (errors.hasErrors()) {
             throw new ServiceValidationException(errors);
         }
+        newTodo.setCategory(categoryResult.get());
+        newTodo.setCompleted(false);
+        newTodo.setDeleted(false);
+        newTodo.setContent(data.getContent());
 
         return this.repo.save(newTodo);
 
     }
 
     public List<TodoItem> findAll() {
-        return this.repo.findAll();
+        List<TodoItem> allTodoItems = this.repo.findAll();
+        return allTodoItems.stream()
+                .filter(todoItem -> !todoItem.isDeleted())
+                .collect(Collectors.toList());
     }
 
     public Optional<TodoItem> findById(Long id) {
@@ -59,7 +63,18 @@ public class TodoItemService {
         }
         TodoItem foundTodo = result.get();
 
-        mapper.map(data, foundTodo);
+        if (data.getTitle() != null) {
+            foundTodo.setTitle(data.getTitle());
+        }
+        if (data.getContent() != null) {
+            foundTodo.setContent(data.getContent());
+
+        }
+        if (data.isCompleted() != foundTodo.isCompleted()) {
+            foundTodo.setCompleted(data.isCompleted());
+
+        }
+
         ValidationErrors errors = new ValidationErrors();
         if (data.getCategoryId() != null) {
             Optional<Category> categoryResult = this.categoryService.findById(data.getCategoryId());
@@ -82,9 +97,9 @@ public class TodoItemService {
         if (result.isEmpty()) {
             return false;
         }
-
-        this.repo.delete(result.get());
-
+        TodoItem todoItem = result.get();
+        todoItem.setDeleted(true); // Mark as deleted
+        this.repo.save(todoItem); // Save the updated item
         return true;
 
     }

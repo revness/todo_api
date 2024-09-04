@@ -32,11 +32,11 @@ public class Category extends BaseEntity {
         this.name = name;
     }
 
-    public List<TodoItem> getPosts() {
+    public List<TodoItem> getTodoItems() {
         return todos;
     }
 
-    public void setPosts(List<TodoItem> todos) {
+    public void setTodoItems(List<TodoItem> todos) {
         this.todos = todos;
     }
 
