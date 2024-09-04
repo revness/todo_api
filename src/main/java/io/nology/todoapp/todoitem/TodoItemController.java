@@ -60,6 +60,5 @@ public class TodoItemController {
             throw new NotFoundException("Could not find todo item with id " + id);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
 }

@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.nology.todoapp.common.exceptions.NotFoundException;
-import io.nology.todoapp.todoitem.TodoItem;
-import io.nology.todoapp.todoitem.UpdateTodoDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,11 +46,10 @@ public class CategoryController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Category> updateTodoItemById(@PathVariable Long id,
-            @Valid @RequestBody CreateCategoryDTO data) throws Exception {
-        Optional<Category> result = this.categoryService.updateCategoryById(id, data);
-        Category foundCategory = result.orElseThrow(() -> new NotFoundException("Could not find todo with id " + id));
-        return new ResponseEntity<>(foundCategory, HttpStatus.OK);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @Valid @RequestBody CreateCategoryDTO data)
+            throws Exception {
+        Category updatedCategory = this.categoryService.updateCategoryById(id, data);
+        return new ResponseEntity<Category>(updatedCategory, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -62,6 +59,7 @@ public class CategoryController {
             throw new NotFoundException("Could not find category with id " + id);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
 }

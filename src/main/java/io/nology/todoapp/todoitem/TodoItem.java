@@ -23,9 +23,14 @@ public class TodoItem extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column
+    private boolean deleted;
+    @Column
+    private boolean completed;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnoreProperties("posts")
+    @JsonIgnoreProperties("todoItems")
     private Category category;
 
     public void setTitle(String title) {
@@ -36,8 +41,16 @@ public class TodoItem extends BaseEntity {
         this.content = content;
     }
 
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public String getTitle() {
@@ -50,6 +63,14 @@ public class TodoItem extends BaseEntity {
 
     public Category getCategory() {
         return category;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
 }

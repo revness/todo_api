@@ -21,13 +21,11 @@
 
 ## ChangeLog
 - Working backend with todos/categories 2/9/24
+- Adds completed and deleted flag to todos.3/9/24
+- Connect frontend to backend 4/9/24
+- Create github actions integration. 4/9/24
+- Work out how to containerise the app using docker and host on GCP/ AWS 4/9/24
 
 
 
 ## Todo
-- Add unique feature to todo app. 
-    -Set deadline date? we can use this to count down to this deadline, in the frontend.
-    -Incentives/ Disincentives?
-- Connect frontend to backend
-- Create github actions integration.
-- Work out how to containerise the app using docker and host on GCP/ AWS

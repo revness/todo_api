@@ -17,6 +17,18 @@ public class CreateTodoDTO {
     @Min(1)
     private Long categoryId;
 
+    private boolean completed;
+
+    private boolean deleted;
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public String getTitle() {
         return title;
     }
