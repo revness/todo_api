@@ -23,9 +23,9 @@
 - Working backend with todos/categories 2/9/24
 - Adds completed and deleted flag to todos.3/9/24
 - Connect frontend to backend 4/9/24
-- Create github actions integration. 4/9/24
-- Work out how to containerise the app using docker and host on GCP/ AWS 4/9/24
 
 
 
 ## Todo
+- Create github actions integration. 4/9/24
+- Work out how to containerise the app using docker and host on GCP/ AWS 4/9/24
