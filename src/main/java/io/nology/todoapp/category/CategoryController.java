@@ -54,11 +54,10 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Category> deleteCategory(@PathVariable long id) throws NotFoundException {
-        boolean deleteSuccessful = this.categoryService.deleteById(id);
-        if (deleteSuccessful == false) {
-            throw new NotFoundException("Could not find category with id " + id);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Optional<Category> category = this.categoryService.deleteById(id);
+        Category deletedCategory = category
+                .orElseThrow(() -> new NotFoundException("Could not find category with id " + id));
+        return new ResponseEntity<>(deletedCategory, HttpStatus.OK);
 
     }
 
