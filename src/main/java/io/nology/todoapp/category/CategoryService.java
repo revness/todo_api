@@ -15,7 +15,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repo;
 
-    public Category create(@Valid CreateCategoryDTO data) throws Exception {
+    public Category create(@Valid CreateCategoryDTO data) throws ServiceValidationException {
         ValidationErrors errors = new ValidationErrors();
         String formattedName = data.getName().trim().toLowerCase();
         if (repo.existsByName(formattedName)) {
@@ -39,15 +39,15 @@ public class CategoryService {
         return this.repo.findById(categoryId);
     }
 
-    public boolean deleteById(Long id) {
-        Optional<Category> result = this.findById(id);
-        if (result.isEmpty()) {
-            return false;
+    public Optional<Category> deleteById(Long id) {
+        Optional<Category> category = this.findById(id);
+        if (category.isEmpty()) {
+            return category;
         }
 
-        this.repo.delete(result.get());
+        this.repo.deleteById(id);
 
-        return true;
+        return category;
     }
 
     public Category updateCategoryById(Long id, CreateCategoryDTO data) throws Exception {
